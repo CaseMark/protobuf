@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package casemark.public.entities;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "go.casemark.ai/protobuf/public/entities";
+
+// Session.
+
+message ChatSession {
+	bytes id = 1;
+
+	bytes user_id = 3;
+
+	repeated bytes document_ids = 4;
+	string         name         = 5;
+
+	google.protobuf.Timestamp created_at = 7;
+	google.protobuf.Timestamp updated_at = 8;
+}
+
+// Role.
+
+message ChatRole {
+	enum Option {
+		USER      = 0;
+		ASSISTANT = 1;
+		SYSTEM    = 2;
+	}
+}
+
+// Message.
+
+message ChatMessage {
+	bytes id = 1;
+
+	bytes           chat_session_id = 2;
+	bytes           user_id         = 3;
+	ChatRole.Option role            = 4;
+	string          content         = 5;
+
+	google.protobuf.Timestamp created_at = 101;
+	google.protobuf.Timestamp updated_at = 102;
+}
+
+message NextChatMessageStatus {
+	enum Option {
+		CREATED = 0;
+
+		IN_PROGRESS = 2;
+		COMPLETED   = 3;
+		FAILED      = 4;
+	}
+}

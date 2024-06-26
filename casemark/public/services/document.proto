@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package casemark.public.services;
+
+import "casemark/public/entities/document.proto";
+import "casemark/libs/rpc/error.proto";
+
+option go_package = "go.casemark.ai/protobuf/public/services";
+
+service Document {
+	rpc UploadDocument(stream UploadDocumentRequest) returns (UploadDocumentResponse) {}
+	rpc GetDocument(GetDocumentRequest) returns (GetDocumentResponse) {}
+	rpc ListDocuments(ListDocumentsRequest) returns (ListDocumentsResponse) {}
+	rpc DeleteDocument(DeleteDocumentRequest) returns (DeleteDocumentResponse) {}
+}
+
+message UploadDocumentRequest {
+	string mime_type = 1;
+	string file_name = 2;
+	bytes  chunk     = 3;
+}
+
+message UploadDocumentResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	casemark.public.entities.Document document = 2;
+}
+
+message GetDocumentRequest {
+	bytes id = 1;
+}
+
+message GetDocumentResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	casemark.public.entities.Document document = 2;
+}
+
+message ListDocumentsRequest {
+	bytes user_id = 1;
+}
+
+message ListDocumentsResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	repeated casemark.public.entities.Document documents = 2;
+}
+
+message DeleteDocumentRequest {
+	bytes id = 1;
+}
+
+message DeleteDocumentResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+}

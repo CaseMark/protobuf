@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package casemark.public.services;
+
+import "casemark/libs/rpc/error.proto";
+import "casemark/libs/types/compression.proto";
+import "casemark/libs/types/file_format.proto";
+import "casemark/public/entities/workflow.proto";
+
+option go_package = "go.casemark.ai/protobuf/public/services";
+
+service Workflow {
+	rpc CreateWorkflow(CreateWorkflowRequest) returns (CreateWorkflowResponse) {}
+	rpc GetWorkflow(GetWorkflowRequest) returns (GetWorkflowResponse) {}
+	rpc ListWorkflows(ListWorkflowsRequest) returns (ListWorkflowsResponse) {}
+	rpc DownloadWorkflowResult(DownloadWorkflowResultRequest) returns (DownloadWorkflowResultResponse);
+}
+
+message CreateWorkflowRequest {
+	casemark.public.entities.Workflow workflow = 2;
+
+	casemark.public.entities.Workflow.Type workflow_type = 3;
+	string                                 name          = 4;
+}
+
+message CreateWorkflowResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	casemark.public.entities.Workflow workflow = 2;
+}
+
+message GetWorkflowRequest {
+	bytes id = 1;
+}
+
+message GetWorkflowResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	casemark.public.entities.Workflow workflow = 2;
+}
+
+message ListWorkflowsRequest {
+	bytes    user_id                                               = 1;
+	repeated casemark.public.entities.Workflow.Type workflow_types = 2;
+	repeated casemark.public.entities.Workflow.Status statuses     = 3;
+}
+
+message ListWorkflowsResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	repeated casemark.public.entities.Workflow workflows = 2;
+}
+
+message DownloadWorkflowResultRequest {
+	bytes workflow_id = 1;
+
+	casemark.libs.types.FileFormat.Option file_format = 10;
+
+	bool with_download_url = 101;
+}
+
+message DownloadWorkflowResultResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	WorkflowResult result = 2;
+}
+
+message WorkflowResult {
+	string                                 name             = 1;
+	string                                 mime_type        = 2;
+	bytes                                  content          = 3;
+	casemark.libs.types.Compression.Option compression      = 4;
+	string                                 template_version = 5;
+
+	string download_url = 101;
+}

@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package casemark.libs.rpc;
+
+import "casemark/libs/rpc/code.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
+
+option csharp_namespace = "CaseMark.Libs.Rpc";
+option go_package       = "go.casemark.ai/protobuf/libs/rpc";
+
+// Inspired by:
+//   - https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto.
+//   - https://github.com/google/jsonapi/blob/1e07b10d47d02b07ccaa2dfc5ceec143bdd81c14/errors.go#L29.
+message Error {
+	// ErrContentExpected
+	// ErrDateOutOfRange
+	// ErrFailedToCommitDBTransaction
+	// ErrFailedToDecodeJSON
+	// ErrFailedToEncodeJSON
+	// ErrForbidden
+	// ErrForwardedError
+	// ErrIntegrationError
+	// ErrInternalError
+	// ErrInvalidDate
+	// ErrInvalidDateRange
+	// ErrInvalidDuration
+	// ErrInvalidNumber
+	// ErrInvalidOption
+	// ErrInvalidResourceID
+	// ErrInvalidStatus
+	// ErrInvalidValue
+	// ErrEmptyValue
+	// ErrValueMismatch
+	// ErrInvalidAmount
+	// ErrNotEnoughBalance
+	// ErrFeatureNotImplemented
+	// ErrPanic
+	// ErrUnauthenticated
+	// ErrUnauthorized
+	// ErrUnexpectedContent
+	// ErrUnexpectedListLength
+	// ErrUnknownError
+	// ErrFailedToRunCommand
+	// ErrUnsupportedOutputFormat
+	// ErrFailedToReadRequestBody
+	// ErrFailedToGenerateUUID
+
+	// A globally unique identifier.
+	string id = 1;
+
+	// The rpc code this error should be mapped to.
+	casemark.libs.rpc.Code code = 2;
+
+	// The error type.
+	string type = 3;
+
+	// A label that can be used as a sub error type, or to better identify the error.
+	string label = 4;
+
+	// The path to the error.
+	// Can be used to identify the field in the request that caused the error.
+	string path = 5;
+
+	// A short description of the error.
+	string title = 6;
+
+	// A detailed description of the error.
+	string detail = 7;
+
+	// The amount of time to wait before retrying the request.
+	google.protobuf.Duration retry_delay = 8;
+
+	// The original error message, from stdlib or external libraries/packages.
+	string cause = 9;
+
+	// Additional metadata about the error.
+	google.protobuf.Struct meta = 10;
+
+	// Available help for the error.
+	Help help = 11;
+}
+
+// Copied from:
+// https://github.com/googleapis/googleapis/blob/1a54b1fa9b194bfef22de18592a6512e51c9afe2/google/rpc/error_details.proto#L261.
+message Help {
+	// Describes a URL link.
+	message Link {
+		// Describes what the link offers.
+		string description = 1;
+
+		// The URL of the link.
+		string url = 2;
+	}
+
+	// URL(s) pointing to additional information on handling the current error.
+	repeated Link links = 1;
+}
+
+message ErrorChain {
+	repeated Error objects = 1;
+}

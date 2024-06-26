@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package casemark.libs.types;
+
+option go_package = "go.casemark.ai/protobuf/libs/types";
+
+message Compression {
+	enum Option {
+		NONE = 0;
+		GZIP = 1;
+	}
+}

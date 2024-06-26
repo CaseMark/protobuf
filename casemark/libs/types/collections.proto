@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package casemark.libs.types;
+
+option go_package = "go.casemark.ai/protobuf/libs/types";
+
+message BytesArray {
+	repeated bytes items = 1;
+}
+
+message BytesMap {
+	map<string, bytes> items = 1;
+}

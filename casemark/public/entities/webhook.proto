@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package casemark.public.entities;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "go.casemark.ai/protobuf/public/entities";
+
+message WebhookEvent {
+	enum Type {
+		// Test event to check if webhook endpoint is responding correctly.
+		PING = 0;
+
+		WORKFLOW_COMPLETED = 1;
+	}
+
+	bytes                     id         = 1;
+	google.protobuf.Timestamp created_at = 2;
+
+	Type event_type = 3;
+
+	google.protobuf.Struct data = 4;
+}

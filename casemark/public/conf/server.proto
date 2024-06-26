@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package casemark.public.conf;
+
+import "casemark/libs/app/runtime.proto";
+import "casemark/libs/gconf/rpc.proto";
+
+option go_package = "casemark/public/conf";
+
+message Server {
+	casemark.libs.app.Build                        app_build              = 1;
+	casemark.libs.app.DeploymentEnvironment.Option deployment_environment = 2;
+
+	casemark.libs.gconf.GrpcServer grpc_server = 101;
+
+	string log_level    = 501;
+	bool   no_log_color = 502;
+
+	map<string, casemark.libs.gconf.GrpcClient> grpc_clients = 601;
+}

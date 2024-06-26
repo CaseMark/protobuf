@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package casemark.libs.types;
+
+option go_package = "go.casemark.ai/protobuf/libs/types";
+
+message Bool {
+	enum State {
+		NOT_SET = 0;
+		TRUE    = 1;
+		FALSE   = 2;
+	}
+}

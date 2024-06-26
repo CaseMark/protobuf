@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package casemark.public.services;
+
+import "casemark/libs/rpc/error.proto";
+import "casemark/public/entities/chat.proto";
+
+option go_package = "go.casemark.ai/protobuf/public/services";
+
+service Chat {
+	rpc CreateChatSession(CreateChatSessionRequest) returns (CreateChatSessionResponse) {}
+	rpc GetChatSession(GetChatSessionRequest) returns (GetChatSessionResponse) {}
+	rpc ListChatSessions(ListChatSessionsRequest) returns (ListChatSessionsResponse) {}
+	rpc DeleteChatSession(DeleteChatSessionRequest) returns (DeleteChatSessionResponse) {}
+
+	rpc GenerateNextChatMessage(GenerateNextChatMessageRequest) returns (stream GenerateNextChatMessageResponse) {}
+	rpc ListChatMessages(ListChatMessagesRequest) returns (ListChatMessagesResponse) {}
+}
+
+// Chat.
+
+message CreateChatSessionRequest {
+	repeated bytes document_ids = 4;
+	string         name         = 5;
+}
+
+message CreateChatSessionResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	casemark.public.entities.ChatSession chat_session = 2;
+}
+
+message GetChatSessionRequest {
+	bytes id = 1;
+}
+
+message GetChatSessionResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	casemark.public.entities.ChatSession chat_session = 2;
+}
+
+message ListChatSessionsRequest {
+	bytes          user_id          = 1;
+	repeated bytes all_document_ids = 2;
+	repeated bytes any_document_ids = 3;
+}
+
+message ListChatSessionsResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	repeated casemark.public.entities.ChatSession chat_sessions = 2;
+}
+
+message DeleteChatSessionRequest {
+	bytes id = 1;
+}
+
+message DeleteChatSessionResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+}
+
+// Chat messages.
+
+message GenerateNextChatMessageRequest {
+	bytes                                chat_session_id = 1;
+	casemark.public.entities.ChatMessage message         = 2;
+}
+
+message GenerateNextChatMessageResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	casemark.public.entities.NextChatMessageStatus.Option status             = 2;
+	string                                                status_description = 3;
+
+	casemark.public.entities.ChatMessage message = 4;
+}
+
+message ListChatMessagesRequest {
+	bytes chat_session_id = 1;
+}
+
+message ListChatMessagesResponse {
+	casemark.libs.rpc.ErrorChain error = 1;
+
+	repeated casemark.public.entities.ChatMessage messages = 2;
+}
